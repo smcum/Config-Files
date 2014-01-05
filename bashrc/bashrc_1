@@ -111,9 +111,10 @@ function powerprompt()
     PROMPT_COMMAND=_powerprompt
     case $TERM in
         *term | rxvt  )
-            PS1="${cyan}[\$TIME \$LOAD]$NC --> \w\n[CnSiva.com] |Python-Minded| ==> \[\033]0;[\u@\h] \w\007\]" ;;
+            PS1="${cyan}[Time: \$TIME Load: \$LOAD] [\w]$NC\n[CnSiva.com] |Python-Minded| ==> \[\033]0;[\u@\h] \w\007\]" ;;
         linux )
-            PS1="${cyan}[\$TIME - \$LOAD]$NC --> \w\n[CnSiva.com] |Python-Minded| ==> " ;;
+            #PS1="${cyan}[\$TIME - \$LOAD]$NC --> \w\n[CnSiva.com] |Python-Minded| ==> " ;;
+            PS1="${cyan}[\$TIME \$LOAD] [\w]$NC\n[CnSiva.com] |Python-Minded| ==> \[\033]0;[\u@\h] \w\007\]" ;;
         * )
             PS1="[\$TIME - \$LOAD]\n[\h \#] : " ;;
     esac
@@ -298,10 +299,10 @@ function killps()   # kill by process name
 
 function my_ip() # get IP adresses
 {
-    MY_IP=$(/sbin/ifconfig ppp0 | awk '/inet/ { print $2 } ' | sed -e s/addr://)
-    MY_ISP=$(/sbin/ifconfig ppp0 | awk '/P-t-P/ { print $3 } ' | sed -e s/P-t-P://)
-    echo $MY_IP
-    echo $MY_ISP
+    MY_IP=$(/sbin/ifconfig | awk '/inet/ { print $2 } ' | sed -e s/addr://)
+    MY_ISP=$(/sbin/ifconfig | awk '/P-t-P/ { print $3 } ' | sed -e s/P-t-P://)
+    echo "IP Address:  " $MY_IP
+    echo "ISP Address: " $MY_ISP
 }
 
 function ii()   # get current host related info
