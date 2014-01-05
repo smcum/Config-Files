@@ -73,11 +73,19 @@ NC='\e[0m'              # No Color
 # --> Nice. Has the same effect as using "ansi.sys" in DOS.
 
 # Looks best on a black background.....
-echo -e "${CYAN}This is BASH ${RED}${BASH_VERSION%.*}${CYAN} - DISPLAY on ${RED}$DISPLAY${NC}\n"
-date
-if [ -x /usr/games/fortune ]; then
-    /usr/games/fortune -s     # makes our day a bit more fun.... :-)
-fi
+#echo -e "${CYAN}This is BASH ${RED}${BASH_VERSION%.*}${CYAN} - DISPLAY on ${RED}$DISPLAY${NC}\n"
+
+echo -e "....................................................................."
+echo -e "...                                                               ..."
+echo -e "...${CYAN}                    Welcome Back [${RED}CnSiva${CYAN}] ${RED}${NC}                     ..."
+echo -e "...                                                               ..."
+echo -e "....................................................................."
+echo -e
+
+## date
+## if [ -x /usr/games/fortune ]; then
+##     /usr/games/fortune -s     # makes our day a bit more fun.... :-)
+## fi
 
 function _exit()        # function to run upon exit of shell
 {
