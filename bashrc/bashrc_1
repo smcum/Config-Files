@@ -75,11 +75,11 @@ NC='\e[0m'              # No Color
 # Looks best on a black background.....
 #echo -e "${CYAN}This is BASH ${RED}${BASH_VERSION%.*}${CYAN} - DISPLAY on ${RED}$DISPLAY${NC}\n"
 
-echo -e "....................................................................."
-echo -e "...                                                               ..."
-echo -e "...${CYAN}                    Welcome Back [${RED}CnSiva${CYAN}] ${RED}${NC}                     ..."
-echo -e "...                                                               ..."
-echo -e "....................................................................."
+echo -e "     ....................................................................."
+echo -e "     ...                                                               ..."
+echo -e "     ...${CYAN}                    Welcome Back [${RED}CnSiva${CYAN}] ${RED}${NC}                     ..."
+echo -e "     ...                                                               ..."
+echo -e "     ....................................................................."
 echo -e
 
 ## date
@@ -96,6 +96,16 @@ trap _exit 0
 #---------------
 # Shell prompt
 #---------------
+
+function parse_git_branch {
+
+        git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \[\1\]/'
+
+    }
+
+function draw_line {
+        for i in $(seq $COLUMNS); do echo -n '_'; done
+    }
 
 function fastprompt()
 {
@@ -119,10 +129,11 @@ function powerprompt()
     PROMPT_COMMAND=_powerprompt
     case $TERM in
         *term | rxvt  )
-            PS1="${cyan}[Time: \$TIME Load: \$LOAD] [\w]$NC\n[CnSiva.com] |Python-Minded| ==> \[\033]0;[\u@\h] \w\007\]" ;;
+            PS1="${cyan}\$(draw_line)\n${CYAN}[Time: ${cyan}\$TIME${CYAN}] [GIT:${cyan}\$(parse_git_branch)${CYAN}]\n[${cyan}\w${CYAN}]$NC\n[CnSiva.com] |Python-Minded| ==> \[\033]0;[\u@\h] \w\007\]" ;;
         linux )
-            #PS1="${cyan}[\$TIME - \$LOAD]$NC --> \w\n[CnSiva.com] |Python-Minded| ==> " ;;
-            PS1="${cyan}[\$TIME \$LOAD] [\w]$NC\n[CnSiva.com] |Python-Minded| ==> \[\033]0;[\u@\h] \w\007\]" ;;
+            # PS1="${cyan}[\$TIME - \$LOAD]$NC --> \w\n[CnSiva.com] |Python-Minded| ==> " ;;
+            # PS1="${cyan}[\$TIME \$LOAD] [\w]$NC\n[CnSiva.com] |Python-Minded| ==> \[\033]0;[\u@\h] \w\007\]" ;;
+            PS1="${cyan}\$(draw_line)\n${CYAN}[Time: ${cyan}\$TIME${CYAN}] [GIT:${cyan}\$(parse_git_branch)${CYAN}]\n[${cyan}\w${CYAN}]$NC\n[CnSiva.com] |Python-Minded| ==> \[\033]0;[\u@\h] \w\007\]" ;;
         * )
             PS1="[\$TIME - \$LOAD]\n[\h \#] : " ;;
     esac
@@ -305,7 +316,7 @@ function killps()   # kill by process name
     done
 }
 
-function my_ip() # get IP adresses
+function ip() # get IP adresses
 {
     MY_IP=$(/sbin/ifconfig | awk '/inet/ { print $2 } ' | sed -e s/addr://)
     MY_ISP=$(/sbin/ifconfig | awk '/P-t-P/ { print $3 } ' | sed -e s/P-t-P://)
@@ -321,7 +332,7 @@ function ii()   # get current host related info
     echo -e "\n${RED}Current date :$NC " ; date
     echo -e "\n${RED}Machine stats :$NC " ; uptime
     echo -e "\n${RED}Memory stats :$NC " ; free
-    my_ip 2>&- ;
+    ip 2>&- ;
     echo -e "\n${RED}Local IP Address :$NC" ; echo ${MY_IP:-"Not connected"}
     echo -e "\n${RED}ISP Address :$NC" ; echo ${MY_ISP:-"Not connected"}
     echo
@@ -529,4 +540,3 @@ complete -F _killall killall killps
 # mode:shell-script
 # sh-shell:bash
 # End:
-
