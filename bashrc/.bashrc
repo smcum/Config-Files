@@ -83,7 +83,7 @@ NC='\e[0m'              # No Color
 
 function _exit()        # function to run upon exit of shell
 {
-    echo -e "${RED}Hasta la vista, baby${NC}"
+    echo -e "${RED}Exit Successful !!!, Not a root anymore ${NC}"
 }
 trap _exit 0
 
