@@ -83,7 +83,7 @@ NC='\e[0m'              # No Color
 
 function _exit()        # function to run upon exit of shell
 {
-    echo -e "${RED}Exit Successful !!!, Not a root anymore ${NC}"
+    echo -e "${RED}Hasta la vista, baby${NC}"
 }
 trap _exit 0
 
@@ -91,10 +91,23 @@ trap _exit 0
 # Shell prompt
 #---------------
 
+
+function line_sep(){
+    echo `printf '%*s\n' "${COLUMNS}" '' | tr ' ' _`
+}
+
+function folders(){
+    echo `ls -d */ | wc -l`
+}
+
+function files(){
+    echo `find . -maxdepth 1 -type f | wc -l`
+}
+
 function local_user() {
             ## PS1="${CYAN}\n│IP: \$(ip): (${cyan}\w${CYAN})\n└──> │Git: ${cyan}\$(parse_git_branch)${CYAN}\n     └──>$NC \[\033]0;[\u@\h] \w\007\]"
             ## PS1='┏━\[\e[44m\]┅◉ \[\e[0;37m\]\[\e[44m\]\d ⌚ \t ┅\[\e[0m\]━━\[\e[44m\]┅◈ \[\e[0;37m\]\[\e[44m\] \[\e[0m\]\n┣━━\[\e[42m\]┅◉ kernel: \[\e[0;37m\]\[\e[42m\]$(uname -r) ┅\[\e[0m\]━━\[\e[42m\]┅◈ uptime: \[\e[0;37m\]\[\e[42m\]$(date -d "`cut -f1 -d. /proc/uptime` seconds ago" +"%a %d %b %R") \[\e[0m\]\n┣ \w (\[\e[0;36m\]$(ls -1 | wc -l) fichero/s\[\e[0m\]) \n┗\[\e[46m\]┅◉\[\e[1;37m\] \u \[\e[0m\]━► '
-            PS1="${CYAN}┏━┅◉ IP ${cyan}\$(ip) ${CYAN}⌚ ━► ${cyan}\t ${CYAN}\n┣━━┅◉ GIT ━► ${cyan}\$(parse_git_branch) ${CYAN}( ${cyan}\$(parse_git_dirty)${CYAN} ) \n┣(${cyan} \w ${CYAN})\n┗┅◉ | ${RED}\e[0;32mCnSiva\e[m${CYAN} | ━►${NC} "
+            PS1="${CYAN}\$(line_sep)\n┏━┅◉ IP ${cyan}\$(ip) ${CYAN}⌚ ━► ${cyan}\t ${CYAN}\n┣━━┅◉ GIT ━► ${cyan}\$(parse_git_branch) ${CYAN}( ${NC}\$(parse_git_dirty)${CYAN} ) Folders: ${cyan}\$(folders) ${CYAN}Files: ${cyan}\$(files) ${CYAN}\n┣(${cyan} \w ${CYAN})\n┗┅◉ | ${RED}\e[0;32mCnSiva\e[m${CYAN} | ━►${NC} "
             ## PS1="${CYAN}\n│IP: \$(ip)│\n│Current Dir    │ ${cyan}\w${CYAN}\n└──> │Git Branch│ ${cyan}\$(parse_git_branch)${CYAN}\n     └──>$NC \[\033]0;[\u@\h] \w\007\]"
             ## PS1="${CYAN}---| IP  |---> ${cyan}\$(ip)\n${CYAN}---| DIR |---> ${cyan}\w\n${CYAN}---| GIT |---> ${cyan}\$(parse_git_branch)\n${CYAN}---| $NC\[\033]0;[\u@\h] \w\007\]"
         }
@@ -117,10 +130,10 @@ parse_git_branch() {
 
 parse_git_dirty() {
       if [[ -d .git ]]; then
-              [[ $(git status | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "Changes Found"
-              [[ $(git status | tail -n1) == "nothing to commit (working directory clean)" ]] && echo "Repository Clean"
+              [[ $(git status | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "Modified"
+              [[ $(git status | tail -n1) == "nothing to commit (working directory clean)" ]] && echo "Clean"
       else
-          echo "Not Git Directory"
+          echo "Not a Repo"
                 fi
             }
 
