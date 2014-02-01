@@ -191,10 +191,6 @@ alias c='clear'
 alias l='ls'
 alias home='cd ~'
 alias untar='tar -xvzf'
-alias jiva='cd ~/Jiva/sentinel_instanceUsingMsgQ'
-alias jivap='cd ~/Jiva/sentinel_instanceUsingMsgQ/Products'
-alias jivaz='cd ~/Jiva/sentinel_instanceUsingMsgQ/Products/ZeSentinel'
-
 
 alias h='history'
 alias j='jobs -l'
