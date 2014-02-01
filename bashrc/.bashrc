@@ -23,6 +23,7 @@ if [ -f /etc/bashrc ]; then
         . /etc/bashrc   # --> Read /etc/bashrc, if present.
 fi
 
+
 #-------------------------------------------------------------
 # Automatic setting of $DISPLAY (if not set already)
 # This works for linux and solaris - your mileage may vary....
@@ -91,7 +92,11 @@ trap _exit 0
 #---------------
 
 function local_user() {
-            PS1="${CYAN}\n│Current Dir    │ ${cyan}\w${CYAN}\n└──> │Git Branch│ ${cyan}\$(parse_git_branch)${CYAN}\n     └──>$NC \[\033]0;[\u@\h] \w\007\]"
+            ## PS1="${CYAN}\n│IP: \$(ip): (${cyan}\w${CYAN})\n└──> │Git: ${cyan}\$(parse_git_branch)${CYAN}\n     └──>$NC \[\033]0;[\u@\h] \w\007\]"
+            ## PS1='┏━\[\e[44m\]┅◉ \[\e[0;37m\]\[\e[44m\]\d ⌚ \t ┅\[\e[0m\]━━\[\e[44m\]┅◈ \[\e[0;37m\]\[\e[44m\] \[\e[0m\]\n┣━━\[\e[42m\]┅◉ kernel: \[\e[0;37m\]\[\e[42m\]$(uname -r) ┅\[\e[0m\]━━\[\e[42m\]┅◈ uptime: \[\e[0;37m\]\[\e[42m\]$(date -d "`cut -f1 -d. /proc/uptime` seconds ago" +"%a %d %b %R") \[\e[0m\]\n┣ \w (\[\e[0;36m\]$(ls -1 | wc -l) fichero/s\[\e[0m\]) \n┗\[\e[46m\]┅◉\[\e[1;37m\] \u \[\e[0m\]━► '
+            PS1="${CYAN}┏━┅◉ IP ${cyan}\$(ip) ${CYAN}⌚ ━► ${cyan}\t ${CYAN}\n┣━━┅◉ GIT ━► ${cyan}\$(parse_git_branch) ${CYAN}( ${cyan}\$(parse_git_dirty)${CYAN} ) \n┣(${cyan} \w ${CYAN})\n┗┅◉ | ${RED}\e[0;32mCnSiva\e[m${CYAN} | ━►${NC} "
+            ## PS1="${CYAN}\n│IP: \$(ip)│\n│Current Dir    │ ${cyan}\w${CYAN}\n└──> │Git Branch│ ${cyan}\$(parse_git_branch)${CYAN}\n     └──>$NC \[\033]0;[\u@\h] \w\007\]"
+            ## PS1="${CYAN}---| IP  |---> ${cyan}\$(ip)\n${CYAN}---| DIR |---> ${cyan}\w\n${CYAN}---| GIT |---> ${cyan}\$(parse_git_branch)\n${CYAN}---| $NC\[\033]0;[\u@\h] \w\007\]"
         }
 
 function fastprompt()
@@ -110,6 +115,14 @@ parse_git_branch() {
       git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
   }
 
+parse_git_dirty() {
+      if [[ -d .git ]]; then
+              [[ $(git status | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "Changes Found"
+              [[ $(git status | tail -n1) == "nothing to commit (working directory clean)" ]] && echo "Repository Clean"
+      else
+          echo "Not Git Directory"
+                fi
+            }
 
 function powerprompt()
 {
@@ -153,6 +166,8 @@ powerprompt     # this is the default prompt - might be slow
 
 # tmux settings, to keep vim color modes
 alias tmux="TERM=screen-256color-bce tmux"
+
+alias con='cat contacts | grep '
 
 alias rm='rm -i'
 alias cp='cp -i'
@@ -323,8 +338,8 @@ function ip() # get IP adresses
 {
     IP=$(/sbin/ifconfig | awk '/inet/ { print $2 } ' | sed -e s/addr://)
     MY_ISP=$(/sbin/ifconfig | awk '/P-t-P/ { print $3 } ' | sed -e s/P-t-P://)
-    echo "IP Address:  " $IP
-    echo "ISP Address: " $MY_ISP
+    echo $IP | awk -F' ' '{print $1"\n"$2}'| sort | grep -v 127.0.0.1
+    ## echo "ISP Address: " $MY_ISP
 }
 
 function ii()   # get current host related info
@@ -543,4 +558,6 @@ complete -F _killall killall killps
 # mode:shell-script
 # sh-shell:bash
 # End:
+
+
 
