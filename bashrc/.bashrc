@@ -349,9 +349,9 @@ function killps()   # kill by process name
 
 function ip() # get IP adresses
 {
-    IP=$(/sbin/ifconfig | awk '/inet/ { print $2 } ' | sed -e s/addr://)
+    IP=$(/sbin/ifconfig | awk '/inet / { print $2 } ' | sed -e s/addr://)
     MY_ISP=$(/sbin/ifconfig | awk '/P-t-P/ { print $3 } ' | sed -e s/P-t-P://)
-    echo $IP | awk -F' ' '{print $1"\n"$2}'| sort | grep -v 127.0.0.1
+    echo $IP | awk -F' ' '{print $1" "$2}'| sort | grep -v 127.0.0.1
     ## echo "ISP Address: " $MY_ISP
 }
 
