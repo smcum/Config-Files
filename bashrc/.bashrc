@@ -24,6 +24,12 @@ if [ -f /etc/bashrc ]; then
 fi
 
 
+#------------------------------------
+# GIT auto completion
+#------------------------------------
+source /etc/bash_completion.d/git
+
+
 #-------------------------------------------------------------
 # Automatic setting of $DISPLAY (if not set already)
 # This works for linux and solaris - your mileage may vary....
@@ -107,8 +113,8 @@ function files(){
 function local_user() {
             ## PS1="${CYAN}\n│IP: \$(ip): (${cyan}\w${CYAN})\n└──> │Git: ${cyan}\$(parse_git_branch)${CYAN}\n     └──>$NC \[\033]0;[\u@\h] \w\007\]"
             ## PS1='┏━\[\e[44m\]┅◉ \[\e[0;37m\]\[\e[44m\]\d ⌚ \t ┅\[\e[0m\]━━\[\e[44m\]┅◈ \[\e[0;37m\]\[\e[44m\] \[\e[0m\]\n┣━━\[\e[42m\]┅◉ kernel: \[\e[0;37m\]\[\e[42m\]$(uname -r) ┅\[\e[0m\]━━\[\e[42m\]┅◈ uptime: \[\e[0;37m\]\[\e[42m\]$(date -d "`cut -f1 -d. /proc/uptime` seconds ago" +"%a %d %b %R") \[\e[0m\]\n┣ \w (\[\e[0;36m\]$(ls -1 | wc -l) fichero/s\[\e[0m\]) \n┗\[\e[46m\]┅◉\[\e[1;37m\] \u \[\e[0m\]━► '
-            PS1="${CYAN}\$(line_sep)\n┏━┅◉ IP ${cyan}\$(ip) ${CYAN}⌚ ━► ${cyan}\t ${CYAN}\n┣━━┅◉ GIT ━► ${cyan}\$(parse_git_branch) ${CYAN}( ${NC}\$(parse_git_dirty)${CYAN} ) Folders: ${cyan}\$(folders) ${CYAN}Files: ${cyan}\$(files) ${CYAN}\n┣(${cyan} \w ${CYAN})\n┗┅◉ | ${RED}\e[0;32mCnSiva\e[m${CYAN} | ━►${NC} "
-            ## PS1="${CYAN}\n│IP: \$(ip)│\n│Current Dir    │ ${cyan}\w${CYAN}\n└──> │Git Branch│ ${cyan}\$(parse_git_branch)${CYAN}\n     └──>$NC \[\033]0;[\u@\h] \w\007\]"
+            ## PS1="${CYAN}\$(line_sep)\n┏━┅◉ IP ${cyan}\$(ip) ${CYAN}⌚ ━► ${cyan}\t ${CYAN}\n┣━━┅◉ GIT ━► ${cyan}\$(parse_git_branch) ${CYAN}( ${NC}\$(parse_git_dirty)${CYAN} ) Folders: ${cyan}\$(folders) ${CYAN}Files: ${cyan}\$(files) ${CYAN}\n┣(${cyan} \w ${CYAN})\n┗┅◉ | ${RED}\e[0;32mCnSiva\e[m${CYAN} | ━►${NC} "
+            PS1="${CYAN}\n│IP: \$(ip)│\n│Current Dir    │ ${cyan}\w${CYAN}\n└──> │Git Branch│ ${cyan}\$(parse_git_branch)${CYAN}${NC} \$(parse_git_dirty) ${CYAN}\n     └──>$NC \[\033]0;[\u@\h] \w\007\]"
             ## PS1="${CYAN}---| IP  |---> ${cyan}\$(ip)\n${CYAN}---| DIR |---> ${cyan}\w\n${CYAN}---| GIT |---> ${cyan}\$(parse_git_branch)\n${CYAN}---| $NC\[\033]0;[\u@\h] \w\007\]"
         }
 
@@ -130,10 +136,10 @@ parse_git_branch() {
 
 parse_git_dirty() {
       if [[ -d .git ]]; then
-              [[ $(git status | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "Modified"
-              [[ $(git status | tail -n1) == "nothing to commit (working directory clean)" ]] && echo "Clean"
+              [[ $(git status | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "(*)"
+              [[ $(git status | tail -n1) == "nothing to commit (working directory clean)" ]] && echo "(Clean)"
       else
-          echo "Not a Repo"
+          echo "(not a Repository)"
                 fi
             }
 
@@ -187,12 +193,13 @@ alias cp='cp -i'
 alias mv='mv -i'
 # -> Prevents accidentally clobbering files.
 
-alias c='clear'
-alias l='ls'
-alias home='cd ~'
+alias l='ls --group-directories-first'
+alias h='cd ~'
 alias untar='tar -xvzf'
+alias jiva='cd ~/Jiva/sentinel_instanceUsingMsgQ'
+alias jivap='cd ~/Jiva/sentinel_instanceUsingMsgQ/Products'
+alias jivaz='cd ~/Jiva/sentinel_instanceUsingMsgQ/Products/ZeSentinel'
 
-alias h='history'
 alias j='jobs -l'
 alias r='rlogin'
 alias which='type -all'
@@ -351,7 +358,6 @@ function ip() # get IP adresses
     echo $IP # | awk -F' ' '{print $1" | "$2}'| sort | grep -v 127.0.0.1
     ## echo "ISP Address: " $MY_ISP
 }
-
 
 function ii()   # get current host related info
 {
