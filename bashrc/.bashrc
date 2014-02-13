@@ -70,13 +70,13 @@ shopt -s extglob        # useful for programmable completion
 #-----------------------
 
 # Define some colors first:
-red='\e[0;31m'
-RED='\e[1;31m'
-blue='\e[0;34m'
-BLUE='\e[1;34m'
-cyan='\e[0;36m'
-CYAN='\e[1;36m'
-NC='\e[0m'              # No Color
+red='\[\e[0;31m\]'
+RED='\[\e[1;31m\]'
+blue='\[\e[0;34m\]'
+BLUE='\[\e[1;34m\]'
+cyan='\[\e[0;36m\]'
+CYAN='\[\e[1;36m\]'
+NC='\[\e[0m\]'              # No Color
 # --> Nice. Has the same effect as using "ansi.sys" in DOS.
 
 # Looks best on a black background.....
@@ -129,7 +129,6 @@ function fastprompt()
     esac
 }
 
-
 parse_git_branch() {
       git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
   }
@@ -138,9 +137,7 @@ parse_git_dirty() {
       if [[ -d .git ]]; then
               [[ $(git status | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "(*)"
               [[ $(git status | tail -n1) == "nothing to commit (working directory clean)" ]] && echo "(Clean)"
-      else
-          echo "(not a Repository)"
-                fi
+      fi
             }
 
 function powerprompt()
@@ -575,6 +572,3 @@ complete -F _killall killall killps
 # mode:shell-script
 # sh-shell:bash
 # End:
-
-
-
