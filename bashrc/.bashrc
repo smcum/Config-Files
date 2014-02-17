@@ -89,7 +89,7 @@ NC='\[\e[0m\]'              # No Color
 
 function _exit()        # function to run upon exit of shell
 {
-    echo -e "${RED}Hasta la vista, baby${NC}"
+    echo -e "${CYAN}\n\tLost Power\n${NC}"
 }
 trap _exit 0
 
