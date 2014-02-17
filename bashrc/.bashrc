@@ -89,7 +89,7 @@ NC='\[\e[0m\]'              # No Color
 
 function _exit()        # function to run upon exit of shell
 {
-    echo -e "${CYAN}\n\tLost Power\n${NC}"
+    echo -e "\e[1;31m\n\tSession Logged Out ...\n\e[0m"
 }
 trap _exit 0
 
