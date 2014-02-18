@@ -118,7 +118,7 @@ function local_user() {
             ## PS1="${CYAN}\n│IP: \$(ip): (${cyan}\w${CYAN})\n└──> │Git: ${cyan}\$(parse_git_branch)${CYAN}\n     └──>$NC \[\033]0;[\u@\h] \w\007\]"
             ## PS1='┏━\[\e[44m\]┅◉ \[\e[0;37m\]\[\e[44m\]\d ⌚ \t ┅\[\e[0m\]━━\[\e[44m\]┅◈ \[\e[0;37m\]\[\e[44m\] \[\e[0m\]\n┣━━\[\e[42m\]┅◉ kernel: \[\e[0;37m\]\[\e[42m\]$(uname -r) ┅\[\e[0m\]━━\[\e[42m\]┅◈ uptime: \[\e[0;37m\]\[\e[42m\]$(date -d "`cut -f1 -d. /proc/uptime` seconds ago" +"%a %d %b %R") \[\e[0m\]\n┣ \w (\[\e[0;36m\]$(ls -1 | wc -l) fichero/s\[\e[0m\]) \n┗\[\e[46m\]┅◉\[\e[1;37m\] \u \[\e[0m\]━► '
             ## PS1="${CYAN}\$(line_sep)\n┏━┅◉ IP ${cyan}\$(ip) ${CYAN}⌚ ━► ${cyan}\t ${CYAN}\n┣━━┅◉ GIT ━► ${cyan}\$(parse_git_branch) ${CYAN}( ${NC}\$(parse_git_dirty)${CYAN} ) Folders: ${cyan}\$(folders) ${CYAN}Files: ${cyan}\$(files) ${CYAN}\n┣(${cyan} \w ${CYAN})\n┗┅◉ | ${RED}\e[0;32mCnSiva\e[m${CYAN} | ━►${NC} "
-            PS1="${CYAN}\n│ ${b_lblue}\$(ip)${NC} ${CYAN}<│\n│ Current Dir      │> ${b_lblue}\w${NC}${CYAN}\n└──> │ Git Branch <│ ${cyan}\$(parse_git_branch)${CYAN}${NC} \$(parse_git_dirty) ${CYAN}\n     └──> │${NC} \e[5mCnSiva ${CYAN}│>$NC \[\033]0;[\u@\h] \w\007\]"
+            PS1="${CYAN}\n│ ${b_lblue}\$(ip)${NC} ${CYAN}<│ ${NC}\$(date_time_12_hr_format)\n${CYAN}│ Current Dir      │> ${b_lblue}\w${NC}${CYAN}\n└──> │ Git Branch <│ ${cyan}\$(parse_git_branch)${CYAN}${NC} \$(parse_git_dirty) ${CYAN}\n     ${CYAN}└──> │${NC} \e[5mCnSiva ${CYAN}│>$NC \[\033]0;[\u@\h] \w\007\]"
             ## PS1="${CYAN}---| IP  |---> ${cyan}\$(ip)\n${CYAN}---| DIR |---> ${cyan}\w\n${CYAN}---| GIT |---> ${cyan}\$(parse_git_branch)\n${CYAN}---| $NC\[\033]0;[\u@\h] \w\007\]"
         }
 
@@ -132,6 +132,10 @@ function fastprompt()
             local_user ;;
     esac
 }
+
+date_time_12_hr_format(){
+        echo `date +"%r"`
+    }
 
 parse_git_branch() {
       git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
@@ -580,5 +584,4 @@ complete -F _killall killall killps
 # mode:shell-script
 # sh-shell:bash
 # End:
-
 
