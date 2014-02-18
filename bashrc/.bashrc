@@ -77,6 +77,10 @@ BLUE='\[\e[1;34m\]'
 cyan='\[\e[0;36m\]'
 CYAN='\[\e[1;36m\]'
 NC='\[\e[0m\]'              # No Color
+
+b_lblue='\[\e[100m\]'
+b_dgrey='\[\e[100m\]'
+
 # --> Nice. Has the same effect as using "ansi.sys" in DOS.
 
 # Looks best on a black background.....
@@ -89,7 +93,7 @@ NC='\[\e[0m\]'              # No Color
 
 function _exit()        # function to run upon exit of shell
 {
-    echo -e "\e[1;31m\n\tSession Logged Out ...\n\e[0m"
+    echo -e "\e[1;31m\n\tSession Logged Out...\e[0m"
 }
 trap _exit 0
 
@@ -114,7 +118,7 @@ function local_user() {
             ## PS1="${CYAN}\n│IP: \$(ip): (${cyan}\w${CYAN})\n└──> │Git: ${cyan}\$(parse_git_branch)${CYAN}\n     └──>$NC \[\033]0;[\u@\h] \w\007\]"
             ## PS1='┏━\[\e[44m\]┅◉ \[\e[0;37m\]\[\e[44m\]\d ⌚ \t ┅\[\e[0m\]━━\[\e[44m\]┅◈ \[\e[0;37m\]\[\e[44m\] \[\e[0m\]\n┣━━\[\e[42m\]┅◉ kernel: \[\e[0;37m\]\[\e[42m\]$(uname -r) ┅\[\e[0m\]━━\[\e[42m\]┅◈ uptime: \[\e[0;37m\]\[\e[42m\]$(date -d "`cut -f1 -d. /proc/uptime` seconds ago" +"%a %d %b %R") \[\e[0m\]\n┣ \w (\[\e[0;36m\]$(ls -1 | wc -l) fichero/s\[\e[0m\]) \n┗\[\e[46m\]┅◉\[\e[1;37m\] \u \[\e[0m\]━► '
             ## PS1="${CYAN}\$(line_sep)\n┏━┅◉ IP ${cyan}\$(ip) ${CYAN}⌚ ━► ${cyan}\t ${CYAN}\n┣━━┅◉ GIT ━► ${cyan}\$(parse_git_branch) ${CYAN}( ${NC}\$(parse_git_dirty)${CYAN} ) Folders: ${cyan}\$(folders) ${CYAN}Files: ${cyan}\$(files) ${CYAN}\n┣(${cyan} \w ${CYAN})\n┗┅◉ | ${RED}\e[0;32mCnSiva\e[m${CYAN} | ━►${NC} "
-            PS1="${CYAN}\n│IP: \$(ip)│\n│Current Dir    │ ${cyan}\w${CYAN}\n└──> │Git Branch│ ${cyan}\$(parse_git_branch)${CYAN}${NC} \$(parse_git_dirty) ${CYAN}\n     └──>$NC \[\033]0;[\u@\h] \w\007\]"
+            PS1="${CYAN}\n│ ${b_lblue}\$(ip)${NC} ${CYAN}<│\n│ Current Dir      │> ${b_lblue}\w${NC}${CYAN}\n└──> │ Git Branch <│ ${cyan}\$(parse_git_branch)${CYAN}${NC} \$(parse_git_dirty) ${CYAN}\n     └──> │${NC} \e[5mCnSiva ${CYAN}│>$NC \[\033]0;[\u@\h] \w\007\]"
             ## PS1="${CYAN}---| IP  |---> ${cyan}\$(ip)\n${CYAN}---| DIR |---> ${cyan}\w\n${CYAN}---| GIT |---> ${cyan}\$(parse_git_branch)\n${CYAN}---| $NC\[\033]0;[\u@\h] \w\007\]"
         }
 
@@ -349,11 +353,15 @@ function killps()   # kill by process name
 
 function ip() # get IP adresses
 {
-    IP=$(/sbin/ifconfig | awk '/inet / { print $2 } ' | sed -e s/addr://)
-    ## MY_ISP=$(/sbin/ifconfig | awk '/P-t-P/ { print $3 } ' | sed -e s/P-t-P://)
-    MY_ISP=$(/sbin/ifconfig | grep "inet " | awk -F':' '{print $2}' | awk -F' ' '{print $1}')| grep -v 127.0.0.1
-    echo $IP # | awk -F' ' '{print $1" | "$2}'| sort | grep -v 127.0.0.1
-    ## echo "ISP Address: " $MY_ISP
+    #### IP=$(/sbin/ifconfig | awk '/inet / { print $2 } ' | sed -e s/addr://)
+    #### ## MY_ISP=$(/sbin/ifconfig | awk '/P-t-P/ { print $3 } ' | sed -e s/P-t-P://)
+    #### MY_ISP=$(/sbin/ifconfig | grep "inet " | awk -F':' '{print $2}' | awk -F' ' '{print $1}')| grep -v 127.0.0.1
+    #### #echo $IP # | awk -F' ' '{print $1" | "$2}'| sort | grep -v 127.0.0.1
+    #### echo $IP
+    #### ## echo "ISP Address: " $MY_ISP
+    IP=$(/sbin/ifconfig | awk -F "[: ]+" '/inet addr:/ { if ($4 != "127.0.0.1") print $4 }')
+    var=$(printf "%-15s" $IP)
+    echo "$var"
 }
 
 function ii()   # get current host related info
@@ -572,3 +580,5 @@ complete -F _killall killall killps
 # mode:shell-script
 # sh-shell:bash
 # End:
+
+
